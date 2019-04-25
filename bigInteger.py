@@ -2,32 +2,40 @@ from copy import deepcopy
 
 
 class Node(object):
+    """Class for representing single node"""
     def __init__(self, data, next=None):
         """Instantiates a Node with default next of None"""
         self.data = data
         self.next = next
 
     def __str__(self):
+        """Returns string representation"""
         return self.data
 
 
 class TwoWayNode(Node):
+    """Class for representing single two-way node"""
     def __init__(self, data, previous=None, next=None):
+        """Constructor for class TwoWayNode"""
         Node.__init__(self, data, next)
         self.previous = previous
 
 
 class BigInteger:
+    """Class for representing Big Integer in Python"""
     def __init__(self, initValue):
-        self.initValue = initValue.lstrip('0')
+        """Constructor for class BigInteger"""
+        self.initValue = initValue.lstrip('0')  # delete zeros from beginning
         if len(self.initValue) == 0:
             self.initValue = '0'
-        if initValue.startswith('-'):
+        if initValue.startswith('-'):  # a 'minus' case
             self.sign = False
-            self.initValue = initValue[1:].lstrip(
-                '0') if initValue != '0' else initValue[1:]
+            if initValue != '0':
+                self.initValue = initValue[1:].lstrip('0')
+            else:
+                self.initValue = initValue[1:]
         else:
-            self.sign = True
+            self.sign = True  # a 'plus' case
 
         self.head = TwoWayNode(self.initValue[0])
         self.tail = self.head
@@ -35,10 +43,8 @@ class BigInteger:
             self.tail.next = TwoWayNode(self.initValue[i + 1], self.tail)
             self.tail = self.tail.next
 
-    def _remove_zeros(self):
-        pass
-
     def __str__(self):
+        """String representation of Big Integer"""
         self_head = self.head
         line = '' if self.sign is True else '-'
         for i in range(len(self)):
@@ -47,9 +53,11 @@ class BigInteger:
         return line
 
     def __int__(self):
+        """Single-integer representation of Big Integer"""
         return int(str(self))
 
     def __len__(self):
+        """Returns length of the structure"""
         length = 0
         head = self.head
         while head is not None:
@@ -58,13 +66,14 @@ class BigInteger:
         return length
 
     def __lt__(self, other):
+        """Implementation of '<' method"""
         self_head = self.head
         other_head = other.head
         if self.sign is False and other.sign is True:
             return True
         elif other.sign is False and self.sign is True:
             return False
-        else:
+        else:  # signs are similar
             if len(self) < len(other):
                 if self.sign is True and other.sign is True:
                     return True
@@ -75,7 +84,7 @@ class BigInteger:
                     return False
                 else:
                     return True
-            else:
+            else:  # length is similar
                 for i in range(len(self)):
                     if int(self_head.data) < int(other_head.data):
                         if self.sign is True and other.sign is True:
@@ -94,13 +103,14 @@ class BigInteger:
                     return False
 
     def __le__(self, other):
+        """Implementation of '<=' method"""
         self_head = self.head
         other_head = other.head
         if self.sign is False and other.sign is True:
             return True
         elif other.sign is False and self.sign is True:
             return False
-        else:
+        else:  # signs are similar
             if len(self) < len(other):
                 if self.sign is True and other.sign is True:
                     return True
@@ -111,7 +121,7 @@ class BigInteger:
                     return False
                 else:
                     return True
-            else:
+            else:  # length is similar
                 for i in range(len(self)):
                     if int(self_head.data) < int(other_head.data):
                         if self.sign is True and other.sign is True:
@@ -130,13 +140,14 @@ class BigInteger:
                     return True
 
     def __gt__(self, other):
+        """Implementation of '>' method"""
         self_head = self.head
         other_head = other.head
         if self.sign is False and other.sign is True:
             return False
         elif other.sign is False and self.sign is True:
             return True
-        else:
+        else:  # signs are similar
             if len(self) < len(other):
                 if self.sign is True and other.sign is True:
                     return False
@@ -147,7 +158,7 @@ class BigInteger:
                     return True
                 else:
                     return False
-            else:
+            else:  # length is similar
                 for i in range(len(self)):
                     if int(self_head.data) < int(other_head.data):
                         if self.sign is True and other.sign is True:
@@ -166,13 +177,14 @@ class BigInteger:
                     return False
 
     def __ge__(self, other):
+        """Implementation of '>=' method"""
         self_head = self.head
         other_head = other.head
         if self.sign is False and other.sign is True:
             return False
         elif other.sign is False and self.sign is True:
             return True
-        else:
+        else:  # signs are similar
             if len(self) < len(other):
                 if self.sign is True and other.sign is True:
                     return False
@@ -183,7 +195,7 @@ class BigInteger:
                     return True
                 else:
                     return False
-            else:
+            else:  # length is similar
                 for i in range(len(self)):
                     if int(self_head.data) < int(other_head.data):
                         if self.sign is True and other.sign is True:
@@ -202,14 +214,15 @@ class BigInteger:
                     return True
 
     def __eq__(self, other):
+        """Implementation of '==' method"""
         self_head = self.head
         other_head = other.head
         if self.sign is not other.sign:
             return False
-        else:
+        else:  # signs are similar
             if len(self) != len(other):
                 return False
-            else:
+            else:  # length is similar
                 for i in range(len(self)):
                     if int(self_head.data) != int(other_head.data):
                         return False
@@ -220,14 +233,15 @@ class BigInteger:
                     return True
 
     def __ne__(self, other):
+        """Implementation of '!=' method"""
         self_head = self.head
         other_head = other.head
         if self.sign is not other.sign:
             return True
-        else:
+        else:  # signs are similar
             if len(self) != len(other):
                 return True
-            else:
+            else:  # length is similar
                 for i in range(len(self)):
                     if int(self_head.data) != int(other_head.data):
                         return True
@@ -238,9 +252,8 @@ class BigInteger:
                     return False
 
     def __add__(self, other):
+        """Implementation of '+' method"""
         new_bigint_str = str()
-        self._remove_zeros()
-        other._remove_zeros()
         if self.sign is True and other.sign is True:
             pass
         elif self.sign is True and other.sign is False:
@@ -277,6 +290,10 @@ class BigInteger:
         remainder = 0
 
         def digit_operation(remainder, self_tail_data=0, other_tail_data=0):
+            """
+            Function for getting a remainder and performing certain
+            operation on two single numbers
+            """
             digit = int(self_tail_data) + int(other_tail_data) + remainder
             if digit >= 10:
                 remainder = digit // 10
@@ -307,13 +324,11 @@ class BigInteger:
         if remainder == 1:
             new_bigint_str += '1'
         res = BigInteger(new_bigint_str[::-1])
-        res._remove_zeros()
         return res
 
     def __sub__(self, other):
+        """Implementation of '-' method"""
         new_bigint_str = str()
-        self._remove_zeros()
-        other._remove_zeros()
         if self.sign is True and other.sign is True:
             if self > other:
                 self_tail = self.tail
@@ -353,6 +368,10 @@ class BigInteger:
         remainder = 0
 
         def digit_operation(remainder, self_tail_data=0, other_tail_data=0):
+            """
+            Function for getting a remainder and performing certain
+            operation on two single numbers
+            """
             if int(self_tail_data) < int(other_tail_data):
                 self_tail_data += '1'
                 self_tail_data = self_tail_data[::-1]
@@ -390,8 +409,9 @@ class BigInteger:
         return res
 
     def __mul__(self, other):
+        """Implementation of '*' method"""
         new_bigint = BigInteger('0')
-        multiplied = list()
+        multiplied = list()  # list for collecting results of multiplication
         second_degree = 0
         self_tail = self.tail
         while self_tail is not None:
@@ -400,12 +420,12 @@ class BigInteger:
             while other_tail is not None:
                 mult = int(self_tail.data) * int(other_tail.data)
                 mult = str(mult) + '0' * first_degree + '0' * second_degree
-                multiplied.append(BigInteger(mult))
+                multiplied.append(BigInteger(mult))  # append result
                 first_degree += 1
                 other_tail = other_tail.previous
             second_degree += 1
             self_tail = self_tail.previous
-        for integer in multiplied:
+        for integer in multiplied:  # add all the results in list
             new_bigint = new_bigint + integer
         if self.sign is other.sign:
             new_bigint.sign = True
@@ -414,7 +434,8 @@ class BigInteger:
         return new_bigint
 
     def __floordiv__(self, other):
-        if str(other) == '0':
+        """Implementation of '//' method"""
+        if int(other) == 0:  # cannot divide by zero
             raise ZeroDivisionError
         self_copy = deepcopy(self)
         other_copy = deepcopy(other)
@@ -440,17 +461,23 @@ class BigInteger:
                 return BigInteger('1')
 
     def __mod__(self, other):
+        """Implementation of '%' method"""
+        assert int(other) != 0, 'Zero division possible'  # no zero division
         res = self - self // other * other
         return res
 
     def __pow__(self, power, modulo=None):
+        """Implementation of '**' method"""
         assert int(str(power)) >= 0, 'Not working with negative powers'
+        #  negative numbers give small numbers such as 0.1234... that cannot be
+        #  interpreted as integers
         res = BigInteger('1')
         for i in range(int(str(power))):
             res *= self
         return res
 
     def __or__(self, other):
+        """Implementation of '|' bitwise method"""
         res = str()
         self_bin = self._to_bin()
         other_bin = other._to_bin()
@@ -472,6 +499,7 @@ class BigInteger:
         return BigInteger(res[::-1])._from_bin()
 
     def __and__(self, other):
+        """Implementation of '&' bitwise method"""
         res = str()
         self_bin = self._to_bin()
         other_bin = other._to_bin()
@@ -493,6 +521,7 @@ class BigInteger:
         return BigInteger(res[::-1])._from_bin()
 
     def __xor__(self, other):
+        """Implementation of '^' bitwise method"""
         res = str()
         self_bin = self._to_bin()
         other_bin = other._to_bin()
@@ -514,6 +543,7 @@ class BigInteger:
         return BigInteger(res[::-1])._from_bin()
 
     def __rshift__(self, other):
+        """Implementation of '>>' bitwise method"""
         self_bin = self._to_bin()
         for i in range(int(str(other))):
             self_bin.tail = self_bin.tail.previous
@@ -524,6 +554,7 @@ class BigInteger:
         return self_bin._from_bin()
 
     def __lshift__(self, other):
+        """Implementation of '<<' bitwise method"""
         self_bin = self._to_bin()
         for i in range(int(str(other))):
             self_bin.tail.next = TwoWayNode('0', self_bin.tail, None)
@@ -531,23 +562,30 @@ class BigInteger:
         return self_bin._from_bin()
 
     def toString(self):
-        return self.initValue
-
-    def comparable(self):
-        pass
-
-    def arithmetic(self, rhsInt, operand):
-        pass
-
-    def bitwiseOps(self, rhsInt, operand):
-        pass
+        """Function for returning string representation of Big Integer"""
+        return str(self)
 
     def _to_bin(self):
-        res = "{0:b}".format(int(str(self)))
+        """Converts normal Big Integer into Big binary number"""
+        assert int(self) >= 0, 'Only positive values pass'
+        res = "{0:b}".format(int(self))
         return BigInteger(res)
 
     def _from_bin(self):
+        """Converts Big binary number into normal Big Integer"""
         res = str(int(str(self), 2))
         return BigInteger(res)
 
-# зсув: __ne__ + xor
+    """
+    Functions below can be used, but I decided to replace them with a 
+    unittest module as it seems more clear for using
+    """
+
+    def comparable(self):
+        raise NotImplementedError
+
+    def arithmetic(self, rhsInt, operand):
+        raise NotImplementedError
+
+    def bitwiseOps(self, rhsInt, operand):
+        raise NotImplementedError
